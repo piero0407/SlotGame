@@ -46,6 +46,7 @@ Electron opens one native window per reel. Press Enter to spin.
 Slot settings live in `public/slot-config.json`. Visual settings live in `public/visual-config.json`.
 
 - `game.reels`, `game.rows`, and size fields control the grid layout.
+- `spin.symbolsPerSecond` controls how fast symbols move during a spin. Lower values move slower.
 - `spin.stepEase` chooses the `pixi-actions` interpolation used for each moving symbol step.
 - `winRule.rowIndex` is `0`, so the current win condition checks the first visible row.
 - `winRule.minimumMatches` is `3`, so the first visible symbol must repeat on every reel.

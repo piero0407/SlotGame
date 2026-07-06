@@ -11,11 +11,11 @@
     "backgroundColor": "#12141f"
   },
   "spin": {
-    "baseDurationMs": 900,
-    "reelDelayMs": 260,
-    "cycles": 18,
+    "symbolsPerSecond": 3,
+    "reelDelayMs": 120,
+    "cycles": 10,
     "stepEase": "quadInOut",
-    "decelerationPower": 2.3,
+    "decelerationPower": 1.2,
     "bounceDistance": 18,
     "bounceDurationMs": 160
   },

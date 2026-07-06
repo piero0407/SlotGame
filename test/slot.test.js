@@ -24,7 +24,7 @@ const baseConfig = normalizeConfig({
     backgroundColor: '#000000',
   },
   spin: {
-    baseDurationMs: 100,
+    symbolsPerSecond: 3,
     reelDelayMs: 0,
     cycles: 1,
     stepEase: 'linear',

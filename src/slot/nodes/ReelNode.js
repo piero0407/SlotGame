@@ -43,7 +43,7 @@ export class ReelNode extends Container {
     const minimumSteps = this.spinConfig.cycles + this.reelIndex * 4;
     const stopDistance = distanceBackward(this.stop, targetStop, this.stripIds.length);
     const totalSteps = alignStepCountToStop(minimumSteps, stopDistance, this.stripIds.length);
-    const durationSeconds = (this.spinConfig.baseDurationMs + this.reelIndex * this.spinConfig.reelDelayMs) / 1000;
+    const durationSeconds = this.getSpinDurationSeconds(totalSteps);
     const stepDurations = this.createStepDurations(totalSteps, durationSeconds);
     let currentStop = this.stop;
     const stepActions = [];
@@ -56,7 +56,7 @@ export class ReelNode extends Container {
           0,
           this.layout.symbolPitch,
           stepDurations[step],
-          this.getSpinInterpolation(),
+          this.getSpinInterpolation(step, totalSteps),
         ),
         Actions.runFunc(() => {
           currentStop = wrapIndex(currentStop - 1, this.stripIds.length);
@@ -132,8 +132,22 @@ export class ReelNode extends Container {
     mask.fill('#ffffff');
   }
 
-  getSpinInterpolation() {
+  getSpinInterpolation(step, totalSteps) {
+    if (step < totalSteps - 1) {
+      return Interpolations.linear;
+    }
+
     return Interpolations[this.spinConfig.stepEase] ?? Interpolations.linear;
+  }
+
+  getSpinDurationSeconds(totalSteps) {
+    const symbolsPerSecond = this.spinConfig.symbolsPerSecond;
+
+    if (Number.isFinite(symbolsPerSecond) && symbolsPerSecond > 0) {
+      return (totalSteps / symbolsPerSecond) + (this.reelIndex * this.spinConfig.reelDelayMs / 1000);
+    }
+
+    return (this.spinConfig.baseDurationMs + this.reelIndex * this.spinConfig.reelDelayMs) / 1000;
   }
 
   createStepDurations(totalSteps, durationSeconds) {
