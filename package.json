@@ -1,0 +1,25 @@
+{
+  "name": "pixi-slot-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "electron:dev": "vite --host 127.0.0.1",
+    "electron:start": "electron .",
+    "start": "electron .",
+    "build": "vite build",
+    "test": "node test/slot.test.js",
+    "electron:build": "vite build",
+    "preview": "vite preview --host 0.0.0.0"
+  },
+  "main": "electron/main.js",
+  "dependencies": {
+    "pixi-actions": "^1.2.4",
+    "pixi.js": "^8.8.1"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "vite": "^6.0.7"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "game": {
+    "title": "Slot Prototype",
+    "reels": 3,
+    "rows": 1,
+    "symbolSize": 256,
+    "symbolWidth": 384,
+    "symbolHeight": 640,
+    "symbolGap": 12,
+    "reelGap": 16,
+    "backgroundColor": "#12141f"
+  },
+  "spin": {
+    "baseDurationMs": 900,
+    "reelDelayMs": 260,
+    "cycles": 18,
+    "stepEase": "quadInOut",
+    "decelerationPower": 2.3,
+    "bounceDistance": 18,
+    "bounceDurationMs": 160
+  },
+  "winRule": {
+    "type": "matchingRow",
+    "rowIndex": 0,
+    "minimumMatches": 3
+  },
+  "symbols": [
+    { "id": 1, "label": "🍒", "color": "#8b0000", "textColor": "#ffffff" },
+    { "id": 2, "label": "🍋", "color": "#fff176", "textColor": "#1f1600" },
+    { "id": 3, "label": "🍇", "color": "#3d007a", "textColor": "#ffffff" },
+    { "id": 4, "label": "🔔", "color": "#ff8f00", "textColor": "#1c0f00" },
+    { "id": 0, "label": "7️⃣", "color": "#005f3c", "textColor": "#ffffff" },
+    { "id": 5, "label": "⭐", "color": "#003f88", "textColor": "#ffffff" }
+  ],
+  "reelStrips": [
+    [1, 2, 3, 4, 0, 5, 2, 0],
+    [2, 5, 1, 0, 4, 3, 1, 4],
+    [3, 4, 0, 1, 5, 2, 0, 1]
+  ]
+}

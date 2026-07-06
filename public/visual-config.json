@@ -1,0 +1,68 @@
+{
+  "scene": {
+    "horizontalPadding": 48,
+    "topPadding": 94,
+    "bottomPadding": 136,
+    "maxScale": 2
+  },
+  "machine": {
+    "bodyY": 54,
+    "bodyBottomPadding": 126,
+    "bodyRadius": 8,
+    "bodyFill": "#222738",
+    "bodyStroke": "#394158",
+    "bodyStrokeWidth": 3,
+    "windowPadding": 14,
+    "windowRadius": 8,
+    "windowFill": "#151927",
+    "windowStroke": "#56617d",
+    "windowStrokeWidth": 2
+  },
+  "symbols": {
+    "tileRadius": 8,
+    "strokeColor": "#ffffff",
+    "strokeAlpha": 0.28,
+    "strokeWidth": 3,
+    "shineX": 10,
+    "shineY": 10,
+    "shineHeight": 28,
+    "shinePaddingX": 20,
+    "shineRadius": 8,
+    "shineColor": "#ffffff",
+    "shineAlpha": 0.16,
+    "fontFamily": "Arial, sans-serif",
+    "singleCharacterFontSize": 93,
+    "multiCharacterFontSize": 66,
+    "fontWeight": "900",
+    "labelYOffset": 3
+  },
+  "text": {
+    "titleFontSize": 32,
+    "titleColor": "#f5f7fb",
+    "titleWeight": "bold",
+    "titleY": 10,
+    "statusFontSize": 18,
+    "statusColor": "#b8bfd8",
+    "fontFamily": "Arial, sans-serif",
+    "idleMessage": "Top row match pays. Press SPIN.",
+    "spinningMessage": "Spinning...",
+    "loseMessage": "No win. Try again.",
+    "winMessageSuffix": "across the top row",
+    "statusGapBelowGrid": 35
+  },
+  "button": {
+    "label": "SPIN",
+    "width": 154,
+    "height": 54,
+    "radius": 8,
+    "fill": "#f5c542",
+    "stroke": "#fff0a8",
+    "strokeWidth": 2,
+    "textColor": "#261c05",
+    "fontFamily": "Arial, sans-serif",
+    "fontSize": 22,
+    "fontWeight": "900",
+    "disabledAlpha": 0.55,
+    "gapBelowGrid": 76
+  }
+}
