@@ -25,11 +25,11 @@
     "minimumMatches": 3
   },
   "symbols": [
+    { "id": 0, "label": "7️⃣", "color": "#005f3c", "textColor": "#ffffff" },
     { "id": 1, "label": "🍒", "color": "#8b0000", "textColor": "#ffffff" },
     { "id": 2, "label": "🍋", "color": "#fff176", "textColor": "#1f1600" },
     { "id": 3, "label": "🍇", "color": "#3d007a", "textColor": "#ffffff" },
     { "id": 4, "label": "🔔", "color": "#ff8f00", "textColor": "#1c0f00" },
-    { "id": 0, "label": "7️⃣", "color": "#005f3c", "textColor": "#ffffff" },
     { "id": 5, "label": "⭐", "color": "#003f88", "textColor": "#ffffff" }
   ],
   "reelStrips": [

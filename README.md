@@ -1,22 +1,45 @@
 # Pixi Slot Prototype
 
-A small Vite + PixiJS prototype for a 3x3 slot game with six procedurally drawn symbols.
+A small Vite + PixiJS prototype for a slot game with six procedurally drawn symbols.
 
-## Run
+## Setup
 
 ```bash
 npm install
+```
+
+## Run in browser
+
+```bash
 npm run dev
 ```
 
-The browser dev server renders the whole prototype in one page. For real native windows, build and start Electron:
+Vite prints a local URL in the terminal. Open that URL in a browser to play the prototype on one page.
+
+## Build / export
+
+```bash
+npm run build
+```
+
+The production build is exported to `dist/`. The exported folder includes `index.html`, bundled assets, and the JSON config files from `public/`.
+
+To test the exported build locally:
+
+```bash
+npm run preview
+```
+
+## Run in Electron
+
+Build first, then start Electron:
 
 ```bash
 npm run build
 npm start
 ```
 
-Electron opens one native window per reel. Press Enter or click a reel window to spin.
+Electron opens one native window per reel. Press Enter to spin.
 
 ## Data
 
