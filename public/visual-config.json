@@ -6,12 +6,6 @@
     "maxScale": 2
   },
   "machine": {
-    "bodyY": 54,
-    "bodyBottomPadding": 126,
-    "bodyRadius": 8,
-    "bodyFill": "#222738",
-    "bodyStroke": "#394158",
-    "bodyStrokeWidth": 3,
     "windowPadding": 14,
     "windowRadius": 8,
     "windowFill": "#151927",
@@ -34,7 +28,8 @@
     "singleCharacterFontSize": 93,
     "multiCharacterFontSize": 66,
     "fontWeight": "900",
-    "labelYOffset": 3
+    "labelYOffset": 3,
+    "imagePadding": 0
   },
   "text": {
     "titleFontSize": 32,

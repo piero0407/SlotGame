@@ -14,12 +14,12 @@ export class SpinCoordinator {
     return Boolean(this.activeSession);
   }
 
-  startSpin() {
+  startSpin(options = {}) {
     if (this.activeSession) {
       return null;
     }
 
-    this.activeSession = createSpinSession(this.config, this.randomIndex);
+    this.activeSession = createSpinSession(this.config, this.randomIndex, options);
 
     this.activeSession.targets.forEach((targetStop, reelIndex) => {
       this.onSpinStart({

@@ -10,7 +10,13 @@ import {
   getVisibleSymbols,
   wrapIndex,
 } from '../src/slot/reelMath.js';
-import { createSpinSession, recordReelStopped, completeSpin, formatSpinResult } from '../src/slot/spinSession.js';
+import {
+  createSpinSession,
+  createWinningTargets,
+  recordReelStopped,
+  completeSpin,
+  formatSpinResult,
+} from '../src/slot/spinSession.js';
 import { evaluateWin } from '../src/slot/winRules.js';
 
 const baseConfig = normalizeConfig({
@@ -91,6 +97,17 @@ test('config merges separate visual settings with defaults', () => {
   assert.equal(config.visual.button.label, 'SPIN');
 });
 
+test('config defaults debug mode off and accepts explicit enable', () => {
+  assert.equal(baseConfig.game.debugMode, false);
+  assert.equal(normalizeConfig({
+    ...baseConfig,
+    game: {
+      ...baseConfig.game,
+      debugMode: true,
+    },
+  }).game.debugMode, true);
+});
+
 test('win rules evaluate matching row', () => {
   assert.deepEqual(evaluateWin([['a'], ['a'], ['a']], baseConfig.winRule), {
     win: true,
@@ -150,6 +167,38 @@ test('spin session completes with formatted result', () => {
 
   assert.equal(completeSpin(session, baseConfig).message, 'WIN: A across the top row');
   assert.equal(formatSpinResult({ win: false, symbolId: 'a' }, baseConfig), 'No win. Try again.');
+});
+
+test('spin session can target a guaranteed win', () => {
+  const session = createSpinSession(baseConfig, () => 1, { guaranteeWin: true });
+  const visibleSymbolsByReel = session.targets.map((target, reelIndex) => (
+    getVisibleSymbols(baseConfig.reelStrips[reelIndex], target, baseConfig.game.rows)
+  ));
+
+  assert.equal(evaluateWin(visibleSymbolsByReel, baseConfig.winRule).win, true);
+});
+
+test('winning targets respect matching row index', () => {
+  const config = normalizeConfig({
+    ...baseConfig,
+    game: { ...baseConfig.game, rows: 2 },
+    winRule: {
+      type: 'matchingRow',
+      rowIndex: 1,
+      minimumMatches: 3,
+    },
+    reelStrips: [
+      ['b', 'a'],
+      ['a', 'b'],
+      ['b', 'a'],
+    ],
+  });
+  const targets = createWinningTargets(config, () => 0);
+  const visibleSymbolsByReel = targets.map((target, reelIndex) => (
+    getVisibleSymbols(config.reelStrips[reelIndex], target, config.game.rows)
+  ));
+
+  assert.equal(evaluateWin(visibleSymbolsByReel, config.winRule).win, true);
 });
 
 test('spin coordinator starts reels and emits one completion result', () => {

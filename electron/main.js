@@ -1,7 +1,7 @@
 import electron from 'electron';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { normalizeConfigWithDiagnostics, reportConfigDiagnostics } from '../src/slot/config.js';
 import { randomInt } from '../src/slot/random.js';
 import { SpinCoordinator } from '../src/slot/SpinCoordinator.js';
@@ -27,7 +27,31 @@ function readConfig() {
 
   reportConfigDiagnostics(diagnostics);
 
-  return normalizedConfig;
+  return normalizeElectronImagePaths(normalizedConfig);
+}
+
+function normalizeElectronImagePaths(rawConfig) {
+  if (useDevServer) {
+    return rawConfig;
+  }
+
+  return {
+    ...rawConfig,
+    symbols: rawConfig.symbols.map((symbol) => ({
+      ...symbol,
+      image: toDistFileUrl(symbol.image),
+      imageUrl: toDistFileUrl(symbol.imageUrl),
+      imageSrc: toDistFileUrl(symbol.imageSrc),
+    })),
+  };
+}
+
+function toDistFileUrl(image) {
+  if (!image || !image.startsWith('/')) {
+    return image;
+  }
+
+  return pathToFileURL(path.join(projectRoot, 'dist', image)).href;
 }
 
 function createRuntime() {
@@ -68,8 +92,20 @@ ipcMain.handle('slot:get-window-info', (event) => {
   };
 });
 
-ipcMain.on('slot:request-spin', () => {
-  spinCoordinator.startSpin();
+ipcMain.on('slot:request-spin', (_event, options = {}) => {
+  spinCoordinator.startSpin({
+    guaranteeWin: config.game.debugMode && options?.guaranteeWin === true,
+  });
+});
+
+ipcMain.on('slot:enable-debug-mode', () => {
+  config.game.debugMode = true;
+
+  for (const win of windowManager.getValues()) {
+    win.webContents.send('slot:debug-mode-changed', {
+      debugMode: config.game.debugMode,
+    });
+  }
 });
 
 ipcMain.on('slot:toggle-maximize', (event) => {
@@ -105,7 +141,7 @@ function installContentSecurityPolicy() {
       responseHeaders: {
         ...details.responseHeaders,
         'Content-Security-Policy': [
-          `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; ${connectSrc}`,
+          `default-src 'self'; script-src 'self'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: file:; ${connectSrc}`,
         ],
       },
     });

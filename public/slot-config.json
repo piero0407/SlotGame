@@ -3,19 +3,18 @@
     "title": "Slot Prototype",
     "reels": 3,
     "rows": 1,
-    "symbolSize": 256,
     "symbolWidth": 384,
-    "symbolHeight": 640,
+    "symbolHeight": 520,
     "symbolGap": 12,
     "reelGap": 16,
     "backgroundColor": "#12141f"
   },
   "spin": {
-    "symbolsPerSecond": 3,
-    "reelDelayMs": 120,
+    "symbolsPerSecond": 4,
+    "reelDelayMs": 40,
     "cycles": 10,
-    "stepEase": "quadInOut",
-    "decelerationPower": 1.2,
+    "stepEase": "linear",
+    "decelerationPower": 0.4,
     "bounceDistance": 18,
     "bounceDurationMs": 160
   },
@@ -25,12 +24,12 @@
     "minimumMatches": 3
   },
   "symbols": [
-    { "id": 0, "label": "7️⃣", "color": "#005f3c", "textColor": "#ffffff" },
-    { "id": 1, "label": "🍒", "color": "#8b0000", "textColor": "#ffffff" },
-    { "id": 2, "label": "🍋", "color": "#fff176", "textColor": "#1f1600" },
-    { "id": 3, "label": "🍇", "color": "#3d007a", "textColor": "#ffffff" },
-    { "id": 4, "label": "🔔", "color": "#ff8f00", "textColor": "#1c0f00" },
-    { "id": 5, "label": "⭐", "color": "#003f88", "textColor": "#ffffff" }
+    { "id": 0, "image": "/assets/symbols/cuy_dorado.png" },
+    { "id": 1, "image": "/assets/symbols/cuy_caribe.png" },
+    { "id": 2, "image": "/assets/symbols/cuy_genio.png" },
+    { "id": 3, "image": "/assets/symbols/cuy_piloto.png" },
+    { "id": 4, "image": "/assets/symbols/cuy_ringmaster.png" },
+    { "id": 5, "image": "/assets/symbols/cuy_tito.png" }
   ],
   "reelStrips": [
     [1, 2, 3, 4, 0, 5, 2, 0],

@@ -9,6 +9,7 @@ export class ElectronReelGame extends Container {
     this.reelIndex = reelIndex;
     this.symbols = new Map(config.symbols.map((symbol) => [symbol.id, symbol]));
     this.layout = createSingleReelLayout(config);
+    this.debugMode = config.game.debugMode === true;
 
     this.background = this.createWindowBackground();
     this.addChild(this.background);
@@ -43,6 +44,8 @@ export class ElectronReelGame extends Container {
 
   drawWindowBackground(background) {
     const visualConfig = this.config.visual.machine;
+    const fill = this.debugMode ? '#2f1525' : visualConfig.windowFill;
+    const stroke = this.debugMode ? '#ff5a5f' : visualConfig.windowStroke;
 
     background.clear();
     background.roundRect(
@@ -52,11 +55,17 @@ export class ElectronReelGame extends Container {
       this.layout.sceneHeight,
       scaleValue(visualConfig.windowRadius, this.layout.visualScale),
     );
-    background.fill(visualConfig.windowFill);
+    background.fill(fill);
     background.stroke({
       width: scaleValue(visualConfig.windowStrokeWidth, this.layout.visualScale),
-      color: visualConfig.windowStroke,
+      color: stroke,
     });
+  }
+
+  setDebugMode(enabled) {
+    this.debugMode = enabled === true;
+    this.config.game.debugMode = this.debugMode;
+    this.drawWindowBackground(this.background);
   }
 
   async spinTo(targetStop) {

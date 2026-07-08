@@ -1,7 +1,9 @@
 import { evaluateWin } from './winRules.js';
 
-export function createSpinSession(config, randomIndex) {
-  const targets = config.reelStrips.map((strip) => randomIndex(strip.length));
+export function createSpinSession(config, randomIndex, options = {}) {
+  const targets = options.guaranteeWin
+    ? createWinningTargets(config, randomIndex)
+    : createRandomTargets(config, randomIndex);
 
   return {
     spinId: createSpinId(),
@@ -9,6 +11,48 @@ export function createSpinSession(config, randomIndex) {
     stopped: new Set(),
     visibleSymbolsByReel: Array.from({ length: config.game.reels }, () => null),
   };
+}
+
+export function createRandomTargets(config, randomIndex) {
+  return config.reelStrips.map((strip) => randomIndex(strip.length));
+}
+
+export function createWinningTargets(config, randomIndex) {
+  if (config.winRule.type !== 'matchingRow') {
+    return createRandomTargets(config, randomIndex);
+  }
+
+  const { rowIndex, minimumMatches } = config.winRule;
+  const symbolTargets = config.symbols.map((symbol) => {
+    const targets = config.reelStrips.map((strip) => findStopForSymbolOnRow(strip, symbol.id, rowIndex));
+
+    return {
+      symbolId: symbol.id,
+      targets,
+      matchCount: targets.filter((target) => target !== null).length,
+    };
+  });
+  const winningSymbol = symbolTargets.find((entry) => entry.targets[0] !== null && entry.matchCount >= minimumMatches);
+
+  if (!winningSymbol) {
+    return createRandomTargets(config, randomIndex);
+  }
+
+  let matchesAssigned = 0;
+
+  return winningSymbol.targets.map((target, reelIndex) => {
+    if (target !== null && matchesAssigned < minimumMatches) {
+      matchesAssigned += 1;
+      return target;
+    }
+
+    if (reelIndex === 0) {
+      matchesAssigned += 1;
+      return target;
+    }
+
+    return randomIndex(config.reelStrips[reelIndex].length);
+  });
 }
 
 export function recordReelStopped(session, config, payload) {
@@ -71,4 +115,14 @@ function createSpinId() {
   }
 
   return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+function findStopForSymbolOnRow(strip, symbolId, rowIndex) {
+  const symbolIndex = strip.findIndex((entry) => entry === symbolId);
+
+  if (symbolIndex === -1) {
+    return null;
+  }
+
+  return (symbolIndex - rowIndex + strip.length) % strip.length;
 }

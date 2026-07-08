@@ -67,12 +67,40 @@ export class SlotGame extends Container {
       fontSize: text.statusFontSize,
     });
     this.spinButton = new SpinButtonNode(this.config.visual.button);
+    this.debugLabel = null;
 
     this.overlayLayer.addChild(this.title, this.status, this.spinButton);
     this.spinButton.on('pointertap', () => this.spin());
+
+    this.setDebugMode(this.config.game.debugMode);
   }
 
-  async spin() {
+  setDebugMode(enabled) {
+    this.config.game.debugMode = enabled === true;
+
+    if (!this.config.game.debugMode) {
+      if (this.debugLabel) {
+        this.debugLabel.remove();
+        this.debugLabel.destroy();
+        this.debugLabel = null;
+      }
+      return;
+    }
+
+    if (!this.debugLabel) {
+      this.debugLabel = new TextLabelNode('DEBUG MODE', {
+        fill: '#ff5a5f',
+        fontFamily: this.config.visual.text.fontFamily,
+        fontSize: 18,
+        fontWeight: '900',
+      });
+      this.overlayLayer.addChild(this.debugLabel);
+    }
+
+    this.positionOverlay();
+  }
+
+  async spin(options = {}) {
     if (this.spinning) {
       return;
     }
@@ -81,10 +109,12 @@ export class SlotGame extends Container {
     this.spinButton.setEnabled(false);
     this.status.text = this.config.visual.text.spinningMessage;
 
-    const session = this.spinCoordinator.startSpin();
+    const session = this.spinCoordinator.startSpin(options);
     let result = null;
 
     if (!session) {
+      this.spinning = false;
+      this.spinButton.setEnabled(true);
       return;
     }
 
@@ -120,5 +150,10 @@ export class SlotGame extends Container {
     this.status.y = this.layout.gridY + this.layout.gridHeight + this.config.visual.text.statusGapBelowGrid;
     this.spinButton.x = this.layout.sceneWidth / 2 - this.config.visual.button.width / 2;
     this.spinButton.y = this.layout.gridY + this.layout.gridHeight + this.config.visual.button.gapBelowGrid;
+
+    if (this.debugLabel) {
+      this.debugLabel.x = this.layout.sceneWidth / 2;
+      this.debugLabel.y = this.config.visual.text.titleY + this.config.visual.text.titleFontSize + 8;
+    }
   }
 }

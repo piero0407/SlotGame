@@ -30,12 +30,6 @@ const defaultVisualConfig = {
     maxScale: 1,
   },
   machine: {
-    bodyY: 54,
-    bodyBottomPadding: 126,
-    bodyRadius: 8,
-    bodyFill: '#222738',
-    bodyStroke: '#394158',
-    bodyStrokeWidth: 3,
     windowPadding: 14,
     windowRadius: 8,
     windowFill: '#151927',
@@ -59,6 +53,7 @@ const defaultVisualConfig = {
     multiCharacterFontSize: 44,
     fontWeight: '900',
     labelYOffset: 3,
+    imagePadding: 0,
   },
   text: {
     titleFontSize: 32,
@@ -130,6 +125,7 @@ export function normalizeConfigWithDiagnostics(rawConfig, visualConfig) {
       game: {
         ...mergedRawConfig.game,
         reels: reelCount,
+        debugMode: mergedRawConfig.game.debugMode === true,
         symbolWidth: mergedRawConfig.game.symbolWidth ?? mergedRawConfig.game.symbolSize,
         symbolHeight: mergedRawConfig.game.symbolHeight ?? mergedRawConfig.game.symbolSize,
       },

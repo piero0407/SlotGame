@@ -20,12 +20,14 @@ export class ReelNode extends Container {
     this.visualConfig = visualConfig;
     this.stop = 0;
     this.visibleSymbols = [];
+    this.tileNodes = [];
 
     this.stripNode = new Container();
     this.maskNode = this.createMask();
 
     this.addChild(this.stripNode, this.maskNode);
     this.mask = this.maskNode;
+    this.ensureTileNodes(this.layout.rows + 1);
   }
 
   setStop(stop) {
@@ -81,29 +83,34 @@ export class ReelNode extends Container {
   renderStopped(stop) {
     const symbols = this.getVisibleSymbols(stop);
 
-    this.stripNode.removeChildren();
+    this.ensureTileNodes(this.layout.rows + 1);
     this.stripNode.y = 0;
 
     symbols.forEach((symbolId, rowIndex) => {
-      const tile = this.createTile(symbolId);
+      const tile = this.tileNodes[rowIndex];
+      tile.setSymbol(this.symbols.get(symbolId), this.layout, this.visualConfig.symbols);
       tile.y = rowIndex * this.layout.symbolPitch;
-      this.stripNode.addChild(tile);
+      tile.visible = true;
     });
 
+    this.hideUnusedTiles(symbols.length);
     this.visibleSymbols = symbols;
   }
 
   renderStepWindow(currentStop) {
     const movingSymbols = getBackwardStepWindowSymbols(this.stripIds, currentStop, this.layout.rows);
 
-    this.stripNode.removeChildren();
+    this.ensureTileNodes(movingSymbols.length);
     this.stripNode.y = 0;
 
     movingSymbols.forEach((symbolId, index) => {
-      const tile = this.createTile(symbolId);
+      const tile = this.tileNodes[index];
+      tile.setSymbol(this.symbols.get(symbolId), this.layout, this.visualConfig.symbols);
       tile.y = (index - 1) * this.layout.symbolPitch;
-      this.stripNode.addChild(tile);
+      tile.visible = true;
     });
+
+    this.hideUnusedTiles(movingSymbols.length);
   }
 
   getVisibleSymbols(stop) {
@@ -112,6 +119,21 @@ export class ReelNode extends Container {
 
   createTile(symbolId) {
     return new SymbolTileNode(this.symbols.get(symbolId), this.layout, this.visualConfig.symbols);
+  }
+
+  ensureTileNodes(count) {
+    while (this.tileNodes.length < count) {
+      const fallbackSymbolId = this.stripIds[0];
+      const tile = this.createTile(fallbackSymbolId);
+      this.tileNodes.push(tile);
+      this.stripNode.addChild(tile);
+    }
+  }
+
+  hideUnusedTiles(usedCount) {
+    for (let index = usedCount; index < this.tileNodes.length; index += 1) {
+      this.tileNodes[index].visible = false;
+    }
   }
 
   createMask() {
